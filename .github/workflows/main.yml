@@ -1,0 +1,54 @@
+name: Python CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  
+
+jobs:
+  dev:
+    name: Dev 
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run dev script
+        run: python dev.py
+
+  test:
+    name: Test 
+    runs-on: ubuntu-22.04
+    needs: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run test script
+        run: python test.py
+
+  prod:
+    name: Prod 
+    runs-on: ubuntu-22.04
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run prod script
+        run: python prod.py
